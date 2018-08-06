@@ -1,0 +1,31 @@
+#!/bin/bash
+
+sudo yum update -y
+
+#Install Docker
+sudo yum install -y docker
+
+sudo service docker start
+
+sudo docker run hello-world
+
+#Install Node.js
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.32.0/install.sh | bash
+
+. ~/.nvm/nvm.sh
+
+nvm install 8.11.3
+
+node -e "console.log('Running Node.js ' + process.version)"
+
+
+#Install Golang
+sudo yum install -y golang
+
+
+#Install VS code
+sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+
+sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
+
+sudo yum install -y code
