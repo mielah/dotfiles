@@ -29,3 +29,11 @@ sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
 sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
 
 sudo yum install -y code
+
+#Changing to zsh shell: right click terminal, go to Title and Command, check all checkboxes
+#and set custom command to zsh
+
+#Install oh-my-zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+
+#Set zsh theme to pygmalion in .zshrc
