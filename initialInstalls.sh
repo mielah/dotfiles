@@ -36,4 +36,19 @@ sudo yum install -y code
 #Install oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
-#Set zsh theme to pygmalion in .zshrc
+#create rsa key pair
+ssh-keygen -o
+
+#get public key
+cat ~/.ssh/id_rsa.pub
+
+echo "Press enter when SSH key has been added"
+
+read
+
+eval "$(ssh-agent -s)"
+
+ssh-add ~/.ssh/id_rsa
+
+#Check ssh connection
+ssh -T git@github.com
