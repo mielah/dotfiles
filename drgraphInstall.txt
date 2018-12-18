@@ -7,3 +7,54 @@ sudo systemctl start docker
 sudo systemctl status docker
 
 sudo systemctl enable docker #enable at every server reboot
+
+sudo docker pull dgraph/dgraph
+
+mkdir -p ~/dgraph
+
+# Run dgraphzero
+sudo docker run -it -p 5080:5080 -p 6080:6080 -p 8080:8080 -p 9080:9080 -p 8000:8000 -v ~/dgraph:/dgraph --name dgraph dgraph/dgraph dgraph zero
+
+# In another terminal, now run dgraph
+sudo docker exec -it dgraph dgraph alpha --lru_mb 2048 --zero localhost:5080
+
+# And in another, run ratel (Dgraph UI)
+sudo docker exec -it dgraph dgraph-ratel
+
+
+#install chrome dependencies (for ratel)
+sudo yum install libappindicator-gtk3
+sudo yum install redhat-lsb-core
+sudo yum install liberation-*
+#download google chrome rpm from website
+sudo rpm -i google-chrome-stable_current_x86_64.rpm
+
+#open ratel at localhost:8000
+
+#ADD TO SCHEMA
+{
+patient.last_name: string @index(term) .
+has_provider: uid .
+}
+
+#ADD DATA
+
+{
+	set {
+    _:pat1 <patient.last_name> "Tester" .
+    _:pat1 <has_provider> _:doc1 .
+    
+    _:doc1 <provider.last_name> "Nell" .
+    _:doc1 <has_patient> _:pat1 .
+  }
+}
+
+#QUERY 
+{
+getdoctor(func: allofterms(patient.last_name, "Tester")) {
+  has_provider {
+    provider.last_name
+  }
+  patient.last_name
+}
+}
