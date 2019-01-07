@@ -12,6 +12,12 @@ sudo docker pull dgraph/dgraph
 
 mkdir -p ~/dgraph
 
+#START HERE IF RESUMING INSTANCE!!!!
+#If dgraph container already exists
+sudo docker ps -a
+#copy container ID of container using dgraph/dgraph image
+sudo docker container rm IDHERE
+
 # Run dgraphzero
 sudo docker run -it -p 5080:5080 -p 6080:6080 -p 8080:8080 -p 9080:9080 -p 8000:8000 -v ~/dgraph:/dgraph --name dgraph dgraph/dgraph dgraph zero
 
@@ -20,7 +26,7 @@ sudo docker exec -it dgraph dgraph alpha --lru_mb 2048 --zero localhost:5080
 
 # And in another, run ratel (Dgraph UI)
 sudo docker exec -it dgraph dgraph-ratel
-
+#END OF RESUMING COMMANDS!!!!!
 
 #install chrome dependencies (for ratel)
 sudo yum install libappindicator-gtk3
