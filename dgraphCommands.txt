@@ -1,0 +1,185 @@
+
+
+ADD TO SCHEMA
+{
+patient.last_name: string @index(term) .
+has_provider: uid .
+}
+
+
+
+
+
+ADD DATA
+
+{
+	set {
+    _:pat1 <patient.last_name> "Jones" .
+    _:pat1 <patient.first_name> "Larry" .
+    _:pat1 <patient.birth_date> "1963-10-10" .
+    _:pat1 <patient.address1> "91 Hill Street" .
+    _:pat1 <patient.city> "Springfield" .
+    _:pat1 <patient.state> "IL" .
+    _:pat1 <patient.zip> "60000" .
+    _:pat1 <patient.home_phone> "1232224444" .
+    _:pat1 <has_provider> _:doc1 .
+    _:pat1 <authorized> _:doc2 .
+    _:pat1 <owns> _:data1 .
+    
+    _:doc1 <provider.last_name> "Nell" .
+    _:doc1 <has_patient> _:pat1 .
+  }
+}
+
+
+
+
+
+{
+	set {
+    _:pat1 <patient.last_name> "Jones" .
+    _:pat1 <patient.first_name> "Larry" .
+    _:pat1 <patient.birth_date> "1963-10-10" .
+    _:pat1 <patient.address1> "91 Hill Street" .
+    _:pat1 <patient.city> "Springfield" .
+    _:pat1 <patient.state> "IL" .
+    _:pat1 <patient.zip> "60000" .
+    _:pat1 <patient.home_phone> "1232224444" .
+    _:pat1 <has_provider> _:doc1 .
+    _:pat1 <authorized> _:doc2 .
+    _:pat1 <owns> _:data1 .
+	_:pat1 <is_user> _:usr1 .
+    
+    _:doc1 <provider.last_name> "Nell" .
+	_:doc1 <provider.first_name> "Samuel" .
+	_:doc1 <provider.title> "Dr." .
+	_:doc1 <provider.verified> "true" .
+	_:doc1 <provider.hipaa_isolation_level> "provider created only" .
+    _:doc1 <has_patient> _:pat1 .
+	_:doc1 <generated> _:data2 .
+	_:doc1 <belongs_to> _:org1 .
+	
+	_:doc2 <provider.last_name> "Bilodeau" .
+	_:doc2 <provider.first_name> "Gudrune" .
+	_:doc2 <provider.title> "Dr." .
+	_:doc2 <provider.verified> "true" .
+	_:doc2 <provider.hipaa_isolation_level> "through patient" .
+    _:doc2 <has_patient> _:pat1 .
+	_:doc2 <belongs_to> _:org1 .
+	
+	_:usr1 <user.user_name> "ljones" .
+	_:usr1 <user.password_hash> "abcd1234" .
+	_:usr1 <user.password_last_updated> "2018-12-18 10:35:03" .
+	_:usr1 <is_patient> _:pat1 .
+	
+	
+	_:org1 <organization.name> "Vista Hospital Group" .
+	_:org1 <organization.address1> "555 Vista Way" .
+	_:org1 <organization.city> "Vista" .
+	_:org1 <organization.state> "CA" .
+	_:org1 <organization.zip> "91000" .
+	_:org1 <organization.phone> "7661237575" .
+	_:org1 <organization.auth_type> "internal" .
+	_:org1 <organization.hipaa_isolation_level> "this org only" .
+	
+	_:data1 <healthcare_data.data_type> "document" .
+	_:data1 <healthcare_data.key> "a1b123" .
+	_:data1 <healthcare_data.added_date> "2018-11-19 15:22:18" .
+	
+	_:data2 <healthcare_data.data_type> "encounter" .
+	_:data2 <healthcare_data.key> "a1b222" .
+	_:data2 <healthcare_data.added_date> "2018-11-05 13:01:55" .
+	
+   
+  }
+}
+
+
+
+
+DELETING PREDICATE
+
+
+delete {
+  * <dgraph.group.acl> * .
+}
+
+QUERY (_predicate_ lists all options)
+{
+getdoctor(func: allofterms(patient.last_name, "Tester")) {
+  has_provider {
+    provider.last_name
+  }
+  patient.last_name
+}
+}
+<patient.last_name>: string @index(term) .
+<patient.first_name>: string @index(term) .
+<patient.middle_name>: string .
+<patient.suffix>: string .
+<patient.title>: string .
+<patient.birth_date>: string  .
+<patient.address1>: string .
+<patient.address2>: string .
+<patient.city>: string .
+<patient.state>: string .
+<patient.zip>: string .
+<patient.home_phone>: int .
+<patient.cell_phone>: int .
+<patient.work_phone>: int .
+<has_provider>: uid .
+<owns>: uid .
+<authorized>: uid .
+<is_user>: uid .
+<has_guardian>: uid .
+
+
+<user.user_name>: string @index(term) .
+<user.password_hash>: string .
+<user.password_last_updated>: string .
+<guardian_of>: uid .
+<is_patient>: uid .
+<is_provider>: uid .
+<belongs_to>: uid .
+
+
+<provider.last_name>: string @index(term) .
+<provider.first_name>: string @index(term) .
+<provider.middle_name>: string .
+<provider.suffix>: string .
+<provider.title>: string .
+<provider.degree>: string .
+<provider.verified>: bool .
+<provider.hipaa_isolation_level>: string .
+<has_patient>: uid .
+<generated>: uid .
+
+
+<organization.name>: string @index(term) .
+<organization.address1>: string .
+<organization.address2>: string .
+<organization.city>: string .
+<organization.state>: string .
+<organization.zip>: string .
+<organization.phone>: int .
+<organization.type>: string .
+<organization.auth_type>: string .
+<organization.hipaa_isolation_level>: string .
+<has_subsidiary>: uid .
+
+
+<administrator.name>: string @index(term) .
+<administrator.address1>: string .
+<administrator.address2>: string .
+<administrator.city>: string .
+<administrator.state>: string .
+<administrator.zip>: string .
+<administrator.phone>: int .
+<administrates>: uid .
+
+
+<healthcare_data.data_type>: string @index(term) .
+<healthcare_data.key>: string @index(term) .
+<healthcare_data.added_date>: dateTime .
+
+
