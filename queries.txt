@@ -1,0 +1,37 @@
+#provider only
+{
+  getDocuments(func: uid(0x12)) {
+    provider.first_name
+    provider.last_name
+    generated {
+      healthcare_data.added_date
+      healthcare_data.data_type
+      healthcare_data.key
+    }
+  }
+}
+
+#through pat
+{
+  getPatDocuments(func: eq(provider.hipaa_isolation_level, "through patient")) {
+    provider.first_name
+    provider.last_name
+    has_patient {
+      patient.first_name
+      patient.last_name
+      owns {
+        healthcare_data.added_date
+        healthcare_data.data_type
+        healthcare_data.key
+      }
+    }
+  }
+}
+
+#this org
+
+
+#pat org
+
+
+#org default
