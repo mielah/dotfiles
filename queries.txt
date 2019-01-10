@@ -1,6 +1,6 @@
-#provider only
+#provider only, get provider yud
 {
-  getDocuments(func: uid(0x12)) {
+  getDocuments(func: eq(provider.last_name, "Bilodeau")) {
     provider.first_name
     provider.last_name
     generated {
@@ -13,7 +13,7 @@
 
 #through pat
 {
-  getPatDocuments(func: eq(provider.hipaa_isolation_level, "through patient")) {
+  getPatDocuments(func: uid(0x13)) @filter (eq(provider.hipaa_isolation_level, "through patient"))  {
     provider.first_name
     provider.last_name
     has_patient {
@@ -27,9 +27,23 @@
     }
   }
 }
-
+  
 #this org
-
+{
+  getOrgDocuments(func: uid(0x13)) @filter (eq(provider.hipaa_isolation_level, "through patient"))  {
+    provider.first_name
+    provider.last_name
+    has_patient {
+      patient.first_name
+      patient.last_name
+      owns {
+        healthcare_data.added_date
+        healthcare_data.data_type
+        healthcare_data.key
+      }
+    }
+  }
+}
 
 #pat org
 
