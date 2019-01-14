@@ -1,18 +1,25 @@
 #Does authorized bypass hipaa isolation levels such as 'provider created only'?
+#Does 'this org only' mean this organization and all of its subsidiaries?
+#Assuming this org only means any providers belonging to that org or its subsidiaries and not their patients or any data they own
 
 
 #get provider id and any relevant hipaa isolation levels
 {
-  getProvider(func: eq(provider.last_name, "Bilodeau")) @normalize {
+  var(func: eq(provider.last_name, "Bilodeau")) @normalize {
     provider_last_name: provider.first_name
     provider_first_name: provider.last_name
    	pId as provider_id: uid
     provider_level: provider.hipaa_isolation_level
+    
     belongs_to {
       org_name: organization.name
       org_level: organization.hipaa_isolation_level
-      org_id: uidhealthcare_data.data_type
-        healthcare_data.key
+			org_id as uid
+    	
+      subOrgs as has_subsidiary {
+        uid
+      }
+      
       belongs_to {
         parent_org_name: organization.name
         parent_org_level: organization.hipaa_isolation_level
@@ -22,7 +29,7 @@
   }
 
 #query to fetch data for 'provider created only' hipaa level
-  providerOnly(func: uid(pId)) @filter(eq(provider_level, "provider created only")){
+  providerOnly(func: uid(pId)) @filter(eq(provider.hipaa_isolation_level, "provider created only")){
     generated {
     	healthcare_data.added_date
       healthcare_data.data_type
@@ -31,7 +38,7 @@
   }
 
 #query to fetch data for 'through patient' hipaa level
-   throughPat(func: uid(pId)) @filter(eq(provider_level, "provider created only")){
+   throughPat(func: uid(pId)) @filter(eq(provider.hipaa_isolation_level, "through patient")){
     has_patient {
     	patient.first_name
       patient.middle_name
@@ -51,21 +58,34 @@
     }
   }
   
-  
-    
-    
-#through pat
-  getPatDocuments(func: uid(prov_gen)) @filter (eq(provider.hipaa_isolation_level, "through patient"))  {
-    has_patient {
-      patient.first_name
-      patient.last_name
-     owns {
-        healthcare_data.added_date
-        healthcare_data.data_type
-        healthcare_data.key
+
+#query to fetch data for 'this org only' hipaa level
+   thisOrg(func: has(belongs_to)) @filter(has(generated)) {
+    belongs_to @filter(uid(org_id) OR uid(subOrgs)) {
+      organization.name
+      org_id:  uid
+      has_subsidiary {
+				organization.name
+      	sub_org_id:  uid
       }
     }
   }
+  
+    
+    
+    
+# #through pat
+#   getPatDocuments(func: uid(prov_gen)) @filter (eq(provider.hipaa_isolation_level, "through patient"))  {
+#     has_patient {
+#       patient.first_name
+#       patient.last_name
+#      owns {
+#         healthcare_data.added_date
+#         healthcare_data.data_type
+#         healthcare_data.key
+#       }
+#     }
+#   }
     
 #     getPatDocs2(func: gt(count(owns), 0)) @filter(eq(authorized, val(prov_gen))) {
 #       patient.first_name
