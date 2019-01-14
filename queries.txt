@@ -1,41 +1,64 @@
-#provider only, get provider yud
+#get provider id and any relevant hipaa isolation levels
 {
-  getDocuments(func: eq(provider.last_name, "Bilodeau")) {
-    provider.first_name
-    provider.last_name
-    generated {
-      healthcare_data.added_date
-      healthcare_data.data_type
-      healthcare_data.key
+  prov_gen as getDocuments(func: eq(provider.last_name, "Bilodeau")) @normalize {
+    provider_last_name: provider.first_name
+    provider_first_name: provider.last_name
+   	provider_id: uid
+    provider_level: provider.hipaa_isolation_level
+    belongs_to {
+      org_name: organization.name
+      org_level: organization.hipaa_isolation_level
+      org_id: uid
+      belongs_to {
+        parent_org_name: organization.name
+        parent_org_level: organization.hipaa_isolation_level
+        parent_org_id: uid
+      }
     }
   }
-}
+
 
 #through pat
-{
-  getPatDocuments(func: uid(0x13)) @filter (eq(provider.hipaa_isolation_level, "through patient"))  {
-    provider.first_name
-    provider.last_name
+
+  getPatDocuments(func: uid(prov_gen)) @filter (eq(provider.hipaa_isolation_level, "through patient"))  {
     has_patient {
       patient.first_name
       patient.last_name
-      owns {
+     owns {
         healthcare_data.added_date
         healthcare_data.data_type
         healthcare_data.key
       }
     }
   }
+    
+#     getPatDocs2(func: gt(count(owns), 0)) @filter(eq(authorized, val(prov_gen))) {
+#       patient.first_name
+#       patient.last_name
+#       # has_provider {
+#       #   generated {
+#       #     healthcare_data.added_date
+#       #     healthcare_data.data_type
+#       #     healthcare_data.key
+#       #   }
+#       # }
+#       owns {
+#         healthcare_data.added_date
+#         healthcare_data.data_type
+#         healthcare_data.key
+#       }
+#     }
+    
 }
+  
   
 #this org
 {
-  getOrgDocuments(func: uid(0x13)) @filter (eq(provider.hipaa_isolation_level, "through patient"))  {
+  getOrgDocuments(func: uid(0x13)) @filter (eq(provider.hipaa_isolation_level, "this org only"))  {
     provider.first_name
     provider.last_name
-    has_patient {
-      patient.first_name
-      patient.last_name
+    belongs_to {
+      organization.name
       owns {
         healthcare_data.added_date
         healthcare_data.data_type
