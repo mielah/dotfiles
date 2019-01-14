@@ -1,14 +1,18 @@
+#Does authorized bypass hipaa isolation levels such as 'provider created only'?
+
+
 #get provider id and any relevant hipaa isolation levels
 {
-  prov_gen as getDocuments(func: eq(provider.last_name, "Bilodeau")) @normalize {
+  getProvider(func: eq(provider.last_name, "Bilodeau")) @normalize {
     provider_last_name: provider.first_name
     provider_first_name: provider.last_name
-   	provider_id: uid
+   	pId as provider_id: uid
     provider_level: provider.hipaa_isolation_level
     belongs_to {
       org_name: organization.name
       org_level: organization.hipaa_isolation_level
-      org_id: uid
+      org_id: uidhealthcare_data.data_type
+        healthcare_data.key
       belongs_to {
         parent_org_name: organization.name
         parent_org_level: organization.hipaa_isolation_level
@@ -17,9 +21,40 @@
     }
   }
 
+#query to fetch data for 'provider created only' hipaa level
+  providerOnly(func: uid(pId)) @filter(eq(provider_level, "provider created only")){
+    generated {
+    	healthcare_data.added_date
+      healthcare_data.data_type
+      healthcare_data.key
+    }
+  }
 
+#query to fetch data for 'through patient' hipaa level
+   throughPat(func: uid(pId)) @filter(eq(provider_level, "provider created only")){
+    has_patient {
+    	patient.first_name
+      patient.middle_name
+      patient.last_name
+      patient_id: uid
+      owns {
+        healthcare_data.added_date
+        healthcare_data.data_type
+        healthcare_data.key
+      }
+    }
+    
+    generated {
+    	healthcare_data.added_date
+      healthcare_data.data_type
+      healthcare_data.key
+    }
+  }
+  
+  
+    
+    
 #through pat
-
   getPatDocuments(func: uid(prov_gen)) @filter (eq(provider.hipaa_isolation_level, "through patient"))  {
     has_patient {
       patient.first_name
