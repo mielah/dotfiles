@@ -23,29 +23,7 @@ ADD DATA
     _:pat1 <patient.zip> "60000" .
     _:pat1 <patient.home_phone> "1232224444" .
     _:pat1 <has_provider> _:doc1 .
-    _:pat1 <authorized> _:doc2 .
-    _:pat1 <owns> _:data1 .
-    
-    _:doc1 <provider.last_name> "Nell" .
-    _:doc1 <has_patient> _:pat1 .
-  }
-}
-
-
-
-
-
-{
-	set {
-    _:pat1 <patient.last_name> "Jones" .
-    _:pat1 <patient.first_name> "Larry" .
-    _:pat1 <patient.birth_date> "1963-10-10" .
-    _:pat1 <patient.address1> "91 Hill Street" .
-    _:pat1 <patient.city> "Springfield" .
-    _:pat1 <patient.state> "IL" .
-    _:pat1 <patient.zip> "60000" .
-    _:pat1 <patient.home_phone> "1232224444" .
-    _:pat1 <has_provider> _:doc1 .
+    _:pat1 <has_provider> _:doc2 .
     _:pat1 <authorized> _:doc2 .
     _:pat1 <owns> _:data1 .
 	_:pat1 <is_user> _:usr1 .
