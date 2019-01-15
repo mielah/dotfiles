@@ -161,3 +161,10 @@ getdoctor(func: allofterms(patient.last_name, "Tester")) {
 <healthcare_data.added_date>: dateTime .
 
 
+
+SYNTAX TO SET DATA
+{
+  set {
+    <0x11> <has_provider> <0x13> .
+  }
+}
