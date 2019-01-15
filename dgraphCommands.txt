@@ -168,3 +168,18 @@ SYNTAX TO SET DATA
     <0x11> <has_provider> <0x13> .
   }
 }
+
+
+{
+	set {
+		 _:org1 <organization.name> "Geyser Corporation" .
+		    _:org1 <organization.address1> "78797 Beaudry Ave" .
+		    _:org1 <organization.city> "Sunnyville" .
+		    _:org1 <organization.state> "AZ" .
+		    _:org1 <organization.zip> "65654" .
+		    _:org1 <organization.phone> "8009996565" .
+		    _:org1 <organization.auth_type> "internal" .
+		    _:org1 <organization.hipaa_isolation_level> "through patient" .
+		    _:org1 <has_subsidiary> _:org2 .
+	}
+}
