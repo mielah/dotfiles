@@ -171,9 +171,8 @@ SYNTAX TO SET DATA
 
 
 {
-	
-
-	_:org1 <organization.name> "Geyser Corporation" .
+  set {
+    _:org1 <organization.name> "Geyser Corporation" .
     _:org1 <organization.address1> "78797 Beaudry Ave" .
     _:org1 <organization.city> "Sunnyville" .
     _:org1 <organization.state> "AZ" .
@@ -182,9 +181,9 @@ SYNTAX TO SET DATA
     _:org1 <organization.auth_type> "internal" .
     _:org1 <organization.hipaa_isolation_level> "through patient" .
     _:org1 <has_subsidiary> _:org2 .
-	_:org1 <belongs_to> <0x17> .
-	
-	_:org2 <organization.name> "Yellow Pebble Hospital" .
+    _:org1 <belongs_to> <0x17> .
+
+    _:org2 <organization.name> "Yellow Pebble Hospital" .
     _:org2 <organization.address1> "222 Jaune St" .
     _:org2 <organization.city> "Austin" .
     _:org2 <organization.state> "TX" .
@@ -192,49 +191,49 @@ SYNTAX TO SET DATA
     _:org2 <organization.auth_type> "internal" .
     _:org2 <organization.hipaa_isolation_level> "parent org" .
     _:org2 <belongs_to> _:org1  .
-	
-	
-	
-	_:doc1 <provider.last_name> "Purple" .
-	_:doc1 <provider.first_name> "Taylor" .
-	_:doc1 <provider.title> "Dr." .
-	_:doc1 <provider.verified> "true" .
-	_:doc1 <provider.hipaa_isolation_level> "org default" .
-	_:doc1 <belongs_to> _:org2 .
-	_:doc1 <has_patient> _:pat1 .
-	_:doc1 <generated> _:data1 .
-	
-	
-	_:doc2 <provider.last_name> "Yellow" .
-	_:doc2 <provider.first_name> "Tyler" .
-	_:doc2 <provider.title> "Dr." .
-	_:doc2 <provider.verified> "true" .
-	_:doc2 <provider.hipaa_isolation_level> "this org" .
-	_:doc2 <belongs_to> _:org1 .
-	_:doc2 <has_patient> _:pat2 .
-	_:doc1 <generated> _:data2 .
-	_:doc1 <generated> _:data3 .
-	
-	
-	_:doc3 <provider.last_name> "Indigo" .
-	_:doc3 <provider.first_name> "Theodore" .
-	_:doc3 <provider.title> "Dr." .
-	_:doc3 <provider.verified> "true" .
-	_:doc3 <provider.hipaa_isolation_level> "parent org" .
-	_:doc3 <belongs_to> _:org2 .
-	
-	
-	 _:pat1 <patient.last_name> "Titanium" .
+
+
+
+    _:doc1 <provider.last_name> "Purple" .
+    _:doc1 <provider.first_name> "Taylor" .
+    _:doc1 <provider.title> "Dr." .
+    _:doc1 <provider.verified> "true" .
+    _:doc1 <provider.hipaa_isolation_level> "org default" .
+    _:doc1 <belongs_to> _:org2 .
+    _:doc1 <has_patient> _:pat1 .
+    _:doc1 <generated> _:data1 .
+
+
+    _:doc2 <provider.last_name> "Yellow" .
+    _:doc2 <provider.first_name> "Tyler" .
+    _:doc2 <provider.title> "Dr." .
+    _:doc2 <provider.verified> "true" .
+    _:doc2 <provider.hipaa_isolation_level> "this org" .
+    _:doc2 <belongs_to> _:org1 .
+    _:doc2 <has_patient> _:pat2 .
+    _:doc1 <generated> _:data2 .
+    _:doc1 <generated> _:data3 .
+
+
+    _:doc3 <provider.last_name> "Indigo" .
+    _:doc3 <provider.first_name> "Theodore" .
+    _:doc3 <provider.title> "Dr." .
+    _:doc3 <provider.verified> "true" .
+    _:doc3 <provider.hipaa_isolation_level> "parent org" .
+    _:doc3 <belongs_to> _:org2 .
+
+
+    _:pat1 <patient.last_name> "Titanium" .
     _:pat1 <patient.first_name> "Phoebe" .
     _:pat1 <patient.birth_date> "1981-04-05" .
     _:pat1 <patient.address1> "88 E Ontario St" .
     _:pat1 <patient.city> "Skokie" .
     _:pat1 <patient.state> "VT" .
     _:pat1 <patient.zip> "10401" .
-	_:pat1 <has_provider> _:doc1 .
-	_:pat1 <owns> _:data4 .
-	
-	 _:pat2 <patient.last_name> "Platinum" .
+    _:pat1 <has_provider> _:doc1 .
+    _:pat1 <owns> _:data4 .
+
+    _:pat2 <patient.last_name> "Platinum" .
     _:pat2 <patient.first_name> "Peter" .
     _:pat2 <patient.birth_date> "1944-08-21" .
     _:pat2 <patient.address1> "5001 Butterfield Lane" .
@@ -242,30 +241,31 @@ SYNTAX TO SET DATA
     _:pat2 <patient.state> "PA" .
     _:pat2 <patient.zip> "41142" .
     _:pat2 <has_provider> _:doc2 .
-	_:pat2 <owns> _:data5 .
+    _:pat2 <owns> _:data5 .
 
-	
-	_:data1 <healthcare_data.data_type> "image" .
-	_:data1 <healthcare_data.key> "b1c1" .
-	_:data1 <healthcare_data.added_date> "2019-01-03 01:01:00" .
-	
-	
-	_:data2 <healthcare_data.data_type> "document" .
-	_:data2 <healthcare_data.key> "b2c2" .
-	_:data2 <healthcare_data.added_date> "2019-01-03 03:11:33" .
-	
-	
-	_:data3 <healthcare_data.data_type> "rx profile" .
-	_:data3 <healthcare_data.key> "b3c3" .
-	_:data3 <healthcare_data.added_date> "2019-01-03 04:55:41" .
-	
-	
-	_:data4 <healthcare_data.data_type> "image" .
-	_:data4 <healthcare_data.key> "b4c4" .
-	_:data4 <healthcare_data.added_date> "2019-01-03 04:58:06" .
-	
-	
-	_:data5 <healthcare_data.data_type> "image" .
-	_:data5 <healthcare_data.key> "b5c5" .
-	_:data5 <healthcare_data.added_date> "2019-01-03 12:51:19" .
+
+    _:data1 <healthcare_data.data_type> "image" .
+    _:data1 <healthcare_data.key> "b1c1" .
+    _:data1 <healthcare_data.added_date> "2019-01-03 01:01:00" .
+
+
+    _:data2 <healthcare_data.data_type> "document" .
+    _:data2 <healthcare_data.key> "b2c2" .
+    _:data2 <healthcare_data.added_date> "2019-01-03 03:11:33" .
+
+
+    _:data3 <healthcare_data.data_type> "rx profile" .
+    _:data3 <healthcare_data.key> "b3c3" .
+    _:data3 <healthcare_data.added_date> "2019-01-03 04:55:41" .
+
+
+    _:data4 <healthcare_data.data_type> "image" .
+    _:data4 <healthcare_data.key> "b4c4" .
+    _:data4 <healthcare_data.added_date> "2019-01-03 04:58:06" .
+
+
+    _:data5 <healthcare_data.data_type> "image" .
+    _:data5 <healthcare_data.key> "b5c5" .
+    _:data5 <healthcare_data.added_date> "2019-01-03 12:51:19" .
+  }
 }
