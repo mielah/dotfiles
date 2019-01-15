@@ -47,7 +47,7 @@ ADD DATA
 	
 	_:usr1 <user.user_name> "ljones" .
 	_:usr1 <user.password_hash> "abcd1234" .
-	_:usr1 <user.password_last_updated> "2018-12-18 10:35:03" .
+	_:usr1 <user.password_last_updated> "2018-12-18T10:35:03" .
 	_:usr1 <is_patient> _:pat1 .
 	
 	
@@ -62,11 +62,11 @@ ADD DATA
 	
 	_:data1 <healthcare_data.data_type> "document" .
 	_:data1 <healthcare_data.key> "a1b123" .
-	_:data1 <healthcare_data.added_date> "2018-11-19 15:22:18" .
+	_:data1 <healthcare_data.added_date> "2018-11-19T15:22:18" .
 	
 	_:data2 <healthcare_data.data_type> "encounter" .
 	_:data2 <healthcare_data.key> "a1b222" .
-	_:data2 <healthcare_data.added_date> "2018-11-05 13:01:55" .
+	_:data2 <healthcare_data.added_date> "2018-11-05T13:01:55" .
 	
    
   }
@@ -246,26 +246,26 @@ SYNTAX TO SET DATA
 
     _:data1 <healthcare_data.data_type> "image" .
     _:data1 <healthcare_data.key> "b1c1" .
-    _:data1 <healthcare_data.added_date> "2019-01-03 01:01:00" .
+    _:data1 <healthcare_data.added_date> "2019-01-03T01:01:00" .
 
 
     _:data2 <healthcare_data.data_type> "document" .
     _:data2 <healthcare_data.key> "b2c2" .
-    _:data2 <healthcare_data.added_date> "2019-01-03 03:11:33" .
+    _:data2 <healthcare_data.added_date> "2019-01-03T03:11:33" .
 
 
     _:data3 <healthcare_data.data_type> "rx profile" .
     _:data3 <healthcare_data.key> "b3c3" .
-    _:data3 <healthcare_data.added_date> "2019-01-03 04:55:41" .
+    _:data3 <healthcare_data.added_date> "2019-01-03T04:55:41" .
 
 
     _:data4 <healthcare_data.data_type> "image" .
     _:data4 <healthcare_data.key> "b4c4" .
-    _:data4 <healthcare_data.added_date> "2019-01-03 04:58:06" .
+    _:data4 <healthcare_data.added_date> "2019-01-03T04:58:06" .
 
 
     _:data5 <healthcare_data.data_type> "image" .
     _:data5 <healthcare_data.key> "b5c5" .
-    _:data5 <healthcare_data.added_date> "2019-01-03 12:51:19" .
+    _:data5 <healthcare_data.added_date> "2019-01-03T12:51:19" .
   }
 }
