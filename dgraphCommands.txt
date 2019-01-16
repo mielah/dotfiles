@@ -211,8 +211,8 @@ SYNTAX TO SET DATA
     _:doc2 <provider.hipaa_isolation_level> "this org" .
     _:doc2 <belongs_to> _:org1 .
     _:doc2 <has_patient> _:pat2 .
-    _:doc1 <generated> _:data2 .
-    _:doc1 <generated> _:data3 .
+    _:doc2 <generated> _:data2 .
+    _:doc2 <generated> _:data3 .
 
 
     _:doc3 <provider.last_name> "Indigo" .
