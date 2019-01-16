@@ -7,7 +7,7 @@
 
 #get provider id and any relevant hipaa isolation levels
 {
-  var(func: eq(provider.last_name, "Indigo")) @normalize {
+  providerSearch(func: allofterms(provider.last_name, "Yellow")) @normalize {
     provider_last_name: provider.first_name
     provider_first_name: provider.last_name
    	pId as provider_id: uid
@@ -25,7 +25,7 @@
       belongs_to {
         parent_org_name: organization.name
         parent_org_level: organization.hipaa_isolation_level
-        parentOrg as parent_org_id: uid
+        parentOrg as uid
       }
     }
   }
@@ -86,7 +86,7 @@
   
 
 #query to fetch data for 'parent org' hipaa level
-	parentOrg(func: has(belongs_to)) @cascade {
+	parentOrg(func: has(belongs_to)) @filter(eq(provider.hipaa_isolation_level, "parent org")) @cascade {
     belongs_to @filter(uid(parentOrg)) {
       organization.name
     }
@@ -99,40 +99,6 @@
       healthcare_data.data_type
       healthcare_data.key
     }
-  }
-    
-    
-    
-    
-# #through pat#assuming this means 
-#   getPatDocuments(func: uid(prov_gen)) @filter (eq(provider.hipaa_isolation_level, "through patient"))  {
-#     has_patient {
-#       patient.first_name
-#       patient.last_name
-#      owns {
-#         healthcare_data.added_date
-#         healthcare_data.data_type
-#         healthcare_data.key
-#       }
-#     }
-#   }
-    
-#     getPatDocs2(func: gt(count(owns), 0)) @filter(eq(authorized, val(prov_gen))) {
-#       patient.first_name
-#       patient.last_name
-#       # has_provider {
-#       #   generated {
-#       #     healthcare_data.added_date
-#       #     healthcare_data.data_type
-#       #     healthcare_data.key
-#       #   }
-#       # }
-#       owns {
-#         healthcare_data.added_date
-#         healthcare_data.data_type
-#         healthcare_data.key
-#       }
-#     }
-    
+  } 
 }
   
