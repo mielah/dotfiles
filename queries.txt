@@ -7,7 +7,7 @@
 
 #get provider id and any relevant hipaa isolation levels
 {
-  providerSearch(func: allofterms(provider.last_name, "Yellow")) @normalize {
+  providerSearch(func: allofterms(provider.last_name, "Purple")) @normalize {
     provider_last_name: provider.first_name
     provider_first_name: provider.last_name
    	pId as provider_id: uid
@@ -67,7 +67,11 @@
 
 
 #query to fetch data for 'this org only' hipaa level
-   thisOrg(func: has(belongs_to)) @filter(has(generated) AND eq(provider.hipaa_isolation_level, "this org")) @cascade {
+#also matches any provs in subsidiary org
+   thisOrg(func: has(belongs_to)) @filter(has(generated) 
+    #comment out for Yellow or other providers with parent org level
+    AND eq(provider.hipaa_isolation_level, "this org")
+  ) @cascade {
     belongs_to @filter(uid(subOrgs) OR uid(org_id)) {
       organization.name
       org_id: uid
@@ -86,7 +90,10 @@
   
 
 #query to fetch data for 'parent org' hipaa level
-	parentOrg(func: has(belongs_to)) @filter(eq(provider.hipaa_isolation_level, "parent org")) @cascade {
+	parentOrg(func: has(belongs_to)) 
+    #comment out for Indigo or other providers with parent org level
+    @filter(eq(provider.hipaa_isolation_level, "parent org"))
+    @cascade {
     belongs_to @filter(uid(parentOrg)) {
       organization.name
     }
@@ -100,5 +107,25 @@
       healthcare_data.key
     }
   } 
+    
+    
+#fetch authorized data for the current provider 
+#no matter what the hipaa isolation level is
+  authData(func: has(authorized)) @cascade {
+    authorized @filter(uid(pId)) {
+      provider.last_name
+      provider.first_name
+    }
+      
+    patient.last_name
+    patient.first_name
+      
+    owns {
+      healthcare_data.added_date
+      healthcare_data.data_type
+      healthcare_data.key
+    }
+  }
+    
 }
   
