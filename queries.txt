@@ -1,11 +1,13 @@
 #Does authorized bypass hipaa isolation levels such as 'provider created only'?
 #Does 'this org only' mean this organization and all of its subsidiaries?
 #Assuming this org only means any providers belonging to that org or its subsidiaries and not their patients or any data they own
+#How does provider verified flag affect results?
+
 
 
 #get provider id and any relevant hipaa isolation levels
 {
-  var(func: eq(provider.last_name, "Bilodeau")) @normalize {
+  var(func: eq(provider.last_name, "yellow")) @normalize {
     provider_last_name: provider.first_name
     provider_first_name: provider.last_name
    	pId as provider_id: uid
@@ -23,11 +25,14 @@
       belongs_to {
         parent_org_name: organization.name
         parent_org_level: organization.hipaa_isolation_level
-        parent_org_id: uid
+        parentOrg as parent_org_id: uid
       }
     }
   }
+}
 
+#SEPARATE SERVER SIDE CALL
+{
 #query to fetch data for 'provider created only' hipaa level
   providerOnly(func: uid(pId)) @filter(eq(provider.hipaa_isolation_level, "provider created only")){
     generated {
@@ -71,10 +76,18 @@
     }
   }
   
+
+#query to fetch data for 'parent org' hipaa level
+	parentOrg(func: has(belongs_to)) {
+    belongs_to @filter(uid(parentOrg)) {
+      provider.last_name
+    }
+  }
     
     
     
-# #through pat
+    
+# #through pat#assuming this means 
 #   getPatDocuments(func: uid(prov_gen)) @filter (eq(provider.hipaa_isolation_level, "through patient"))  {
 #     has_patient {
 #       patient.first_name
