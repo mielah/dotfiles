@@ -142,7 +142,7 @@ getdoctor(func: allofterms(patient.last_name, "Tester")) {
 <organization.phone>: int .
 <organization.type>: string .
 <organization.auth_type>: string .
-<organization.hipaa_isolation_level>: string .
+<organization.hipaa_isolation_level>: string @index(term).
 <has_subsidiary>: uid .
 
 
