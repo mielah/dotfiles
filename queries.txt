@@ -7,7 +7,7 @@
 
 #get provider id and any relevant hipaa isolation levels
 {
-  var(func: eq(provider.last_name, "yellow")) @normalize {
+  var(func: eq(provider.last_name, "Yellow")) @normalize {
     provider_last_name: provider.first_name
     provider_first_name: provider.last_name
    	pId as provider_id: uid
@@ -30,6 +30,7 @@
     }
   }
 }
+
 
 #SEPARATE SERVER SIDE CALL
 {
@@ -62,17 +63,25 @@
       healthcare_data.key
     }
   }
-  
+
+    subName(func: uid(subOrgs)) {
+      organization.name
+    }
 
 #query to fetch data for 'this org only' hipaa level
-   thisOrg(func: has(belongs_to)) @filter(has(generated)) {
-    belongs_to @filter(uid(org_id) OR uid(subOrgs)) {
+   thisOrg(func: has(belongs_to)) @filter(has(generated)) @cascade {
+    belongs_to @filter(uid(subOrgs) OR uid(org_id)) {
+    #belongs_to @filter(uid(0x2731) OR uid(subOrgs)) {
       organization.name
-      org_id:  uid
-      has_subsidiary {
-				organization.name
-      	sub_org_id:  uid
-      }
+      org_id: uid
+    }
+
+    orgProvider: uid
+    ordProviderLastName: provider.last_name
+    generated {
+      healthcare_data.added_date
+      healthcare_data.data_type
+      healthcare_data.key
     }
   }
   
