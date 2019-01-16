@@ -7,7 +7,7 @@
 
 #get provider id and any relevant hipaa isolation levels
 {
-  var(func: eq(provider.last_name, "Yellow")) @normalize {
+  var(func: eq(provider.last_name, "Indigo")) @normalize {
     provider_last_name: provider.first_name
     provider_first_name: provider.last_name
    	pId as provider_id: uid
@@ -35,6 +35,7 @@
 #SEPARATE SERVER SIDE CALL
 {
 #query to fetch data for 'provider created only' hipaa level
+  #Add hipaa isolation level logic to queries or handle at script/program level?
   providerOnly(func: uid(pId)) @filter(eq(provider.hipaa_isolation_level, "provider created only")){
     generated {
     	healthcare_data.added_date
@@ -64,20 +65,18 @@
     }
   }
 
-    subName(func: uid(subOrgs)) {
-      organization.name
-    }
 
 #query to fetch data for 'this org only' hipaa level
-   thisOrg(func: has(belongs_to)) @filter(has(generated)) @cascade {
+   thisOrg(func: has(belongs_to)) @filter(has(generated) AND eq(provider.hipaa_isolation_level, "this org")) @cascade {
     belongs_to @filter(uid(subOrgs) OR uid(org_id)) {
-    #belongs_to @filter(uid(0x2731) OR uid(subOrgs)) {
       organization.name
       org_id: uid
     }
 
     orgProvider: uid
-    ordProviderLastName: provider.last_name
+    provider.last_name
+    provider.first_name
+      
     generated {
       healthcare_data.added_date
       healthcare_data.data_type
@@ -87,9 +86,18 @@
   
 
 #query to fetch data for 'parent org' hipaa level
-	parentOrg(func: has(belongs_to)) {
+	parentOrg(func: has(belongs_to)) @cascade {
     belongs_to @filter(uid(parentOrg)) {
-      provider.last_name
+      organization.name
+    }
+      
+    provider.last_name
+    provider.first_name
+
+    generated {
+      healthcare_data.added_date
+      healthcare_data.data_type
+      healthcare_data.key
     }
   }
     
@@ -128,24 +136,3 @@
     
 }
   
-  
-#this org
-{
-  getOrgDocuments(func: uid(0x13)) @filter (eq(provider.hipaa_isolation_level, "this org only"))  {
-    provider.first_name
-    provider.last_name
-    belongs_to {
-      organization.name
-      owns {
-        healthcare_data.added_date
-        healthcare_data.data_type
-        healthcare_data.key
-      }
-    }
-  }
-}
-
-#pat org
-
-
-#org default
